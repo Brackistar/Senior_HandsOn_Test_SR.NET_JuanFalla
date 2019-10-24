@@ -10,7 +10,7 @@ using PlataformaWeb.Models;
 namespace PlataformaWeb.Controllers
 {
 
-    public class EmployeesController : ApiController
+    public class EmployeesAPIController : ApiController
     {
         private DataAccess data = new DataAccess();
         public IEnumerable<EmployeeModel> Get()
@@ -37,7 +37,7 @@ namespace PlataformaWeb.Controllers
 
             EmployeeModel employee = data.Employees.Where(
                 Employee =>
-                Employee.name.Equals(name)
+                Employee.name.Equals(name,StringComparison.InvariantCultureIgnoreCase)
                 ).FirstOrDefault();
             if (employee != null)
                 return Ok(employee);

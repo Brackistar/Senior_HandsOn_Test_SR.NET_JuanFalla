@@ -1,6 +1,8 @@
-﻿using System;
+﻿using PlataformaWeb.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 
@@ -34,13 +36,45 @@ namespace PlataformaWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult FindEmployees(string name)
+        public async System.Threading.Tasks.Task<ActionResult> FindEmployeesAsync(string name)
         {
-            ViewBag.DataUrl = null;
-            if (string.IsNullOrEmpty(name))
+            IEnumerable<EmployeeModel> employees = null;
+            using (HttpClient client = new HttpClient())
             {
+                client.BaseAddress = new Uri(
+                    Url.RouteUrl(
+                        "DefaultApi",
+                        new { httproute = "" }
+                        )
+                    );
+                HttpResponseMessage response;
+                if (string.IsNullOrEmpty(name))
+                {
+                    response = await client.GetAsync("EmployeesAPI/");
 
+                }
+                else
+                {
+                    response = await client.GetAsync(
+                        string.Format(
+                            "EmployeesAPI/{0}",
+                            name
+                            )
+                        );
+                }
+                if (!response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("Error");
+                }
+                employees = await response.Content.ReadAsAsync<List<EmployeeModel>>();
+                return PartialView(employees);
             }
+        }
+
+        [ChildActionOnly]
+        public ActionResult Error()
+        {
+            return PartialView();
         }
     }
 }
