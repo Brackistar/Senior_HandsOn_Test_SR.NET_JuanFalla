@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.Linq;
 using System.Net;
@@ -10,14 +11,21 @@ namespace PlataformaWeb.Models
 {
     public class EmployeeModel
     {
+        [Display(Name ="Código")]
         public int id { get; set; }
+        [Display(Name = "Nombre")]
         public string name { get; set; }
+        [Display(Name = "Tipo Contrato")]
         public string contractTypeName { get; set; }
         public int roleId { get; set; }
+        [Display(Name = "Rol")]
         public string roleName { get; set; }
+        [Display(Name = "Descripción del Rol")]
         public string roleDescription { get; set; }
         public double hourlySalary { get; set; }
         public double monthlySalary { get; set; }
+        [Display(Name = "Salario Anual")]
+        [DataType(DataType.Currency)]
         public double annualSalary { get; set; }
         public EmployeeModel(string name, double hourlySalary, double monthlySalary)
         {

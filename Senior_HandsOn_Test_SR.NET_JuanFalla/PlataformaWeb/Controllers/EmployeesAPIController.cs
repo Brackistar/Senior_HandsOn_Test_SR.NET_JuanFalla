@@ -32,17 +32,15 @@ namespace PlataformaWeb.Controllers
         //    }
         //}
 
-        public IHttpActionResult GetEmployee(string name)
+        public IEnumerable<EmployeeModel> Get(string name)
         {
-
             EmployeeModel employee = data.Employees.Where(
                 Employee =>
-                Employee.name.Equals(name,StringComparison.InvariantCultureIgnoreCase)
+                Employee.name.Equals(name, StringComparison.InvariantCultureIgnoreCase)
                 ).FirstOrDefault();
-            if (employee != null)
-                return Ok(employee);
-
-            return NotFound();
+            List<EmployeeModel> employees = new List<EmployeeModel>();
+            employees.Add(employee);
+            return employees;
 
         }
     }

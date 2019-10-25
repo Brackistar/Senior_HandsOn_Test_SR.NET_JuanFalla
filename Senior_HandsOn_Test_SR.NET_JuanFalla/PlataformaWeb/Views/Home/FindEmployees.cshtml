@@ -1,6 +1,8 @@
 ﻿
 @{
     ViewBag.Title = "Buscar Información de empleados";
+    string InputSelector = "Name",
+        ContainerSelector = "EmployeesSpace";
 }
 <div class="row">
     <div class="col-xs-1 col-sm-10 p-sm-1">
@@ -11,15 +13,41 @@
     <div class="col-xs-12 col-sm-10 p-sm-1">
         <div class="row">
             <div class="col-xs-12 col-sm-10">
-                @Html.Editor("Name")
+                @Html.Editor("Name", new { htmlAttributes = new { @class = "textInput", @id = InputSelector } })
             </div>
             <div class="col-xs-12 col-sm-2 float-right">
-                <button type="button" id="SearchEmployees" data-container="Name" data-target="EmployeesSpace"></button>
+                <button type="button" id="SearchEmployees" data-container="#@InputSelector" data-target="#@ContainerSelector">Buscar</button>
             </div>
         </div>
     </div>
 </div>
-<div id="EmployeesSpace" class="row">
+<div class="row">
+    <div id="@ContainerSelector" class="col-xs-12 col-sm-10 p-sm-1 start-hidden">
 
+    </div>
+    <div id="loading" class="loading-screen start-hidden">
+        <img src="~/Content/Img/ajax-loader.gif" />"/>
+    </div>
 </div>
 
+@section scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('button#SearchEmployees').click(function () {
+                var dataContainer = $(this).data('container');
+                var dataTarget = $(this).data('target');
+                var URL = '@Url.Action("FindEmployeesAsync","Home")/?name=' + $(dataContainer).val();
+                $.post(
+                    URL,
+                    function (data) {
+                        $(dataTarget).html(data);
+                    }).done(
+                        function () {
+                            $(dataTarget).css('display', 'block');
+                        }
+                    );
+            });
+        });
+    </script>
+}

@@ -8,11 +8,12 @@ using System.Web.Mvc;
 
 namespace PlataformaWeb.Controllers
 {
+    [AllowAnonymous]
     public class HomeController : Controller
     {
         public ActionResult Index()
         {
-            return View();
+            return RedirectToAction("FindEmployees");
         }
 
         public ActionResult About()
@@ -41,25 +42,20 @@ namespace PlataformaWeb.Controllers
             IEnumerable<EmployeeModel> employees = null;
             using (HttpClient client = new HttpClient())
             {
+                string apiURL = Url.Action("Get", "api/EmployeesAPI",null,Request.Url.Scheme);
                 client.BaseAddress = new Uri(
-                    Url.RouteUrl(
-                        "DefaultApi",
-                        new { httproute = "" }
-                        )
+                        apiURL
                     );
                 HttpResponseMessage response;
                 if (string.IsNullOrEmpty(name))
                 {
-                    response = await client.GetAsync("EmployeesAPI/");
+                    response = await client.GetAsync(string.Empty);
 
                 }
                 else
                 {
                     response = await client.GetAsync(
-                        string.Format(
-                            "EmployeesAPI/{0}",
-                            name
-                            )
+                        apiURL+"/?name="+name
                         );
                 }
                 if (!response.IsSuccessStatusCode)
