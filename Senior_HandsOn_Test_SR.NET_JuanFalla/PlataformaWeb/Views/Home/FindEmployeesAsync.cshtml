@@ -1,8 +1,6 @@
 ﻿@model IEnumerable<PlataformaWeb.Models.EmployeeModel>
 
-@*<p>
-    @Html.ActionLink("Create New", "Create")
-</p>*@
+
 <table class="table">
     <tr>
         <th>
@@ -11,59 +9,41 @@
         <th>
             @Html.DisplayNameFor(model => model.contractTypeName)
         </th>
-        @*<th>
-            @Html.DisplayNameFor(model => model.roleId)
-        </th>*@
+
         <th>
             @Html.DisplayNameFor(model => model.roleName)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.roleDescription)
         </th>
-        @*<th>
-            @Html.DisplayNameFor(model => model.hourlySalary)
-        </th>*@
-        @*<th>
-            @Html.DisplayNameFor(model => model.monthlySalary)
-        </th>*@
+
         <th>
             @Html.DisplayNameFor(model => model.annualSalary)
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.contractTypeName)
-        </td>
-        @*<td>
-            @Html.DisplayFor(modelItem => item.roleId)
-        </td>*@
-        <td>
-            @Html.DisplayFor(modelItem => item.roleName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.roleDescription)
-        </td>
-        @*<td>
-            @Html.DisplayFor(modelItem => item.hourlySalary)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.monthlySalary)
-        </td>*@
-        <td>
-            @Html.DisplayFor(modelItem => item.annualSalary)
-        </td>
-        @*<td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
-        </td>*@
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.contractTypeName)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.roleName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.roleDescription)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.annualSalary)
+            </td>
+        </tr>
+    }
 
 </table>

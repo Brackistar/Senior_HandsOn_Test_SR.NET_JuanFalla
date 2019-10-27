@@ -13,34 +13,35 @@ namespace PlataformaWeb.Controllers
     public class EmployeesAPIController : ApiController
     {
         private DataAccess data = new DataAccess();
-        public IEnumerable<EmployeeModel> Get()
+        /// <summary>
+        /// Gets a list of all employees
+        /// </summary>
+        /// <returns>Result of the search and if success list of all employees</returns>
+        public IHttpActionResult Get()
         {
+            List<EmployeeModel> employees = data.Employees;
+            if (employees == null || employees.Count == 0)
+                return NotFound();
 
-            return data.Employees;
+            return Ok(employees.AsEnumerable());
 
         }
-        //public IHttpActionResult GetAllEmployees()
-        //{
-        //    using (DataAccess data = new DataAccess())
-        //    {
-        //        IEnumerable<EmployeeModel> Employees = data.Employees;
-
-        //        if (Employees != null)
-        //            return Ok(Employees);
-
-        //        return NotFound();
-        //    }
-        //}
-
-        public IEnumerable<EmployeeModel> Get(string name)
+        /// <summary>
+        /// Returns list of employees with a name equal to se searched name
+        /// </summary>
+        /// <param name="name">Name to search for</param>
+        /// <returns>Result of the search and if success list of the employees found</returns>
+        public IHttpActionResult Get(string name)
         {
-            EmployeeModel employee = data.Employees.Where(
+            List<EmployeeModel> employees = data.Employees.Where(
                 Employee =>
                 Employee.name.Equals(name, StringComparison.InvariantCultureIgnoreCase)
-                ).FirstOrDefault();
-            List<EmployeeModel> employees = new List<EmployeeModel>();
-            employees.Add(employee);
-            return employees;
+                ).ToList();
+            if (employees == null)
+                return NotFound();
+
+
+            return Ok(employees.AsEnumerable());
 
         }
     }

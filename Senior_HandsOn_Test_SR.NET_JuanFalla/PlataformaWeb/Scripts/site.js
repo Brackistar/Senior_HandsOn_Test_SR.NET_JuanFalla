@@ -3,3 +3,8 @@
 }).bind("ajaxComplete", function () {
     $("#loading").hide();
 });
+
+function HintPanEmpty(SearchHintPan) {
+    $(SearchHintPan).hide("fast");
+    $(SearchHintPan).html(null);
+}

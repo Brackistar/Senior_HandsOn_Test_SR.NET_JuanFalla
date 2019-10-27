@@ -1,0 +1,13 @@
+﻿@model IEnumerable<PlataformaWeb.Models.EmployeeModel>
+
+<table class="table">
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.name)
+            </td>
+        </tr>
+    }
+
+</table>

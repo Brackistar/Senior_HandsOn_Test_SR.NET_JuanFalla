@@ -10,23 +10,32 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-xs-12 col-sm-10 p-sm-1">
+    <div class="col-xs-12 col-sm-10">
         <div class="row">
             <div class="col-xs-12 col-sm-10">
-                @Html.Editor("Name", new { htmlAttributes = new { @class = "textInput", @id = InputSelector } })
+                @Html.Editor("Name", new { htmlAttributes = new { @class = "textInput col-xs-12 col-sm-10", @id = InputSelector } })
             </div>
             <div class="col-xs-12 col-sm-2 float-right">
                 <button type="button" id="SearchEmployees" data-container="#@InputSelector" data-target="#@ContainerSelector">Buscar</button>
             </div>
         </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-10">
+                <div class="row">
+                    <div id="SearchHint" class="col-xs-12 col-sm-10 start-hidden hint-panel">
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <div class="row">
-    <div id="@ContainerSelector" class="col-xs-12 col-sm-10 p-sm-1 start-hidden">
+    <div id="@ContainerSelector" class="col-xs-12 col-sm-10 start-hidden">
 
     </div>
-    <div id="loading" class="loading-screen start-hidden">
-        <img src="~/Content/Img/ajax-loader.gif" />"/>
+    <div id="loading" class="loading-screen start-hidden" style="background-image:url(@Url.Content("~/Content/Img/ajax-loader.gif"))">
+        @*<img src="~/Content/Img/ajax-loader.gif"/>*@
     </div>
 </div>
 
@@ -34,10 +43,13 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
+            var SearchHintPan = $('#SearchHint');
             $('button#SearchEmployees').click(function () {
+                HintPanEmpty(SearchHintPan);
                 var dataContainer = $(this).data('container');
                 var dataTarget = $(this).data('target');
                 var URL = '@Url.Action("FindEmployeesAsync","Home")/?name=' + $(dataContainer).val();
+                $(dataTarget).html(null);
                 $.post(
                     URL,
                     function (data) {
@@ -47,6 +59,35 @@
                             $(dataTarget).css('display', 'block');
                         }
                     );
+            });
+            $('input#@InputSelector').change(function () {
+                HintPanEmpty(SearchHintPan);
+            }).keypress(function (event) {
+                var regex = new RegExp("^[a-zA-Z0-9]+$");
+                var str = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+                if (regex.test(str) || str !== '' || str !== null) {
+                    var URL = '@Url.Action("GetPosibleNames","Home")/?PartialName=' + str
+                    $.post(
+                        URL,
+                        function (data) {
+                            SearchHintPan.html(data);
+                        }
+                    ).done(function () {
+                        SearchHintPan.show("fast");
+                        return true;
+                    });
+                }
+                else {
+                    HintPanEmpty(SearchHintPan);
+                    preventDefault();
+                    return false;
+                }
+            }).keydown(function (key) {
+                if (key.keyCode === 8 || key.keyCode === 46) {
+                    HintPanEmpty(SearchHintPan);
+                    preventDefault();
+                    return true;
+                }
             });
         });
     </script>
